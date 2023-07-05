@@ -177,7 +177,7 @@ a:hover {
 }
 
 a:not([href]):not([tabindex]) {
-  color: inherit;
+  /*color: inherit;*/
   text-decoration: none;
 }
 a:not([href]):not([tabindex]):hover,
@@ -412,7 +412,7 @@ h6,
 }
 
 .lead {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 300;
 }
 
@@ -497,7 +497,9 @@ mark,
 
 .img-fluid {
   max-width: 100%;
-  height: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .img-thumbnail {
@@ -691,6 +693,7 @@ pre code {
   width: 100%;
   padding-right: 15px;
   padding-left: 15px;
+  padding-top :10px;
 }
 
 .col {
@@ -2711,12 +2714,12 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
-  color: #fff;
+  color: #fff !important;
   background-color: #007bff;
   border-color: #007bff;
 }
 .btn-primary:hover {
-  color: #fff;
+  color: #555 !important;
   background-color: #0069d9;
   border-color: #0062cc;
 }
@@ -3589,7 +3592,7 @@ input[type="button"].btn-block {
 }
 
 .dropdown-menu.show {
-  display: block;
+  display: block !important;
 }
 
 .dropdown-header {
@@ -10557,7 +10560,7 @@ h5,
 .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
   font-size: 11px;
   padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   padding-left: 17px;
   padding-right: 17px;
   font-weight: 400;
@@ -10670,14 +10673,13 @@ h5,
   -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
-.ftco-navbar-light.scrolled .nav-item.active > a {
-  color: #03a696 !important;
-}
+
 .ftco-navbar-light.scrolled .nav-item.cta > a {
   color: #fff !important;
   background: #03a696;
   border: none !important;
 }
+
 .ftco-navbar-light.scrolled .nav-item.cta > a span {
   display: inline-block;
   color: #fff !important;
@@ -10800,7 +10802,7 @@ h5,
   position: absolute;
   left: 0;
   right: 0;
-  top: -30px;
+  top: -10px;
   z-index: 99;
 }
 
@@ -11132,13 +11134,13 @@ h5,
   outline: none;
 }
 .btn.btn-primary {
-  background: #03a696;
-  border: 1px solid #03a696;
+  background: #03a696 !important;
+  border: 1px solid #03a696 !important;
   color: #fff;
 }
 .btn.btn-primary:hover {
-  border: 1px solid #03a696;
-  background: white;
+  border: 1px solid #03a696 !important;
+  background: white !important;
   color: #03a696;
 }
 .btn.btn-primary.btn-outline-primary {
@@ -11315,6 +11317,8 @@ h5,
   -ms-transition: all 0.3s ease;
   transition: all 0.3s ease;
   border: 1px solid #f0f0f0;
+  height: 200px;
+  box-shadow: 2px 20px 8px;
 }
 @media (max-width: 991.98px) {
   .product {
@@ -12107,6 +12111,14 @@ textarea.form-control {
   position: relative;
 }
 .heading-section .subheading {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 10px;
+  font-family: "Lora", Georgia, serif;
+  font-style: italic;
+  color: #03a696;
+}
+.subheading1 {
   font-size: 18px;
   display: block;
   margin-bottom: 10px;
@@ -13034,3 +13046,5 @@ textarea.form-control {
     stroke-dashoffset: -136px;
   }
 }
+
+

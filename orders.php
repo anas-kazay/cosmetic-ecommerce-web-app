@@ -1,14 +1,15 @@
  <?php
+ session_start();
  include_once 'includes/function.php';
  include_once 'includes/db.php';
  error_reporting(E_ALL ^ E_NOTICE);
-session_start();
+ if (!isset( $_SESSION['user_email'])){
+  header('Location: authentification.php');
+  exit();
+}
 $user_email= $_SESSION['user_email'];
  
-$getInfo="SELECT * FROM users WHERE user_email= '$user_email'";
-$run_info=mysqli_query($db,$getInfo);
-while($row_info= mysqli_fetch_array($run_info)){
-    $user_id= $row_info['user_id'];}
+
  ?>
 <!DOCTYPE html>
 <head>
@@ -35,6 +36,108 @@ while($row_info= mysqli_fetch_array($run_info)){
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript">
+
+    $(document).ready(function(){
+
+      $.ajax({
+        type:'post',
+        url:'php/store_items.php',
+        dataType:'json',
+        data:{
+          total_cart_items:"totalitems"
+        },
+        success:function(data) {
+         document.getElementById("total_items").value=data.a;
+          document.getElementById("total_price").innerHTML=data.b+" DH";
+          
+        }
+      });
+
+    });
+
+    function cart(id)
+    {
+	  var ele=document.getElementById(id);
+	  var img_src=ele.getElementsByTagName("img")[0].src;
+	  var name=document.getElementById("title"+id).textContent;
+	  var price=document.getElementById("price"+id).textContent;
+	  $.ajax({
+        type:'post',
+        url:'php/store_items.php',
+        data:{
+          item_src:img_src,
+          item_name:name,
+          item_price:price,
+          item_id:id
+        },
+        success:function(response) {
+          document.getElementById("total_items").value=response;
+        }
+      });
+	
+    }
+
+    function remove(id){
+      $.ajax(
+        {
+          type:'post',
+          url:'php/store_items.php',
+          dataType:'json',
+          data:{
+            item_remove:id
+          },
+          success:function(data){
+          $("#myTable").load(" #myTable");
+          document.getElementById("total_items").value=data.a;
+          document.getElementById("total_price").innerHTML=data.b+" DH";
+        }
+          
+        }
+        
+      )
+}
+
+
+
+function plus(id){
+      $.ajax(
+        {
+          type:'post',
+          url:'php/store_items.php',
+          dataType:'json',
+          data:{
+            item_add:id
+          },
+          success:function(data){
+          $("#myTable").load(" #myTable");
+          document.getElementById("total_items").value=data.a;
+          document.getElementById("total_price").innerHTML=data.b+" DH";
+        }
+          
+        }
+        
+      )
+}
+
+    function show_cart()
+    {
+      $.ajax({
+      type:'post',
+      url:'php/store_items.php',
+      data:{
+        showcart:"cart"
+      },
+      success:function(response) {
+        document.getElementById("mycart").innerHTML=response;
+        $("#mycart").slideToggle();
+      }
+     });
+
+    }
+	
+</script>
 </head>
 <body>
 
@@ -59,7 +162,7 @@ while($row_info= mysqli_fetch_array($run_info)){
   <div class='container' style='margin-top:70px;margin-bottom:120px'>
   <center>
     
-    <h1> Mes commandes </h1>
+    <h1> Mon Panier </h1>
     
     <p class='lead'>Vos commandes en un seul endroit</p>
     
@@ -76,17 +179,18 @@ while($row_info= mysqli_fetch_array($run_info)){
 
 
     <div class='cart-list'>
-    <table class='table table-bordered table-hover'>
+    <table class='table table-bordered table-hover' id='myTable'>
         
         <thead class='thead-primary'><!--  thead Begin  -->
             
             <tr><!--  tr Begin  -->
                 <th>&nbsp;</th>
-                <th> Identifiant : </th>
-                <th> Produit : </th>
-                <th> Qte: </th>
-                <th> Totale(DHS): </th>
-                <th> Date de Commande:</th>
+                <th> Identifiant  </th>
+                <th>Image</th>
+                <th> Produit  </th>
+                <th>quantite</th>
+                <th> Prix </th>
+
                
             </tr>
         </thead>
@@ -103,10 +207,7 @@ while($row_info= mysqli_fetch_array($run_info)){
     					<h3>Total du carte</h3>
     					<p class='d-flex total-price'>
     						<span>Prix total</span>
-                <span>".
-                 total_price()
-                
-                 ."DHS</span>
+                <span id='total_price'>0 DH</span>
     					</p>
             </div>
             <form action=".$_SERVER['PHP_SELF']." method='POST'>

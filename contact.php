@@ -1,14 +1,20 @@
+<?php session_start(); 
+
+$_SESSION['cart'] = array();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>AYNOU-SHOP/Contact</title>
+    <title>BIOTIFUL LADY/Contact</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 
+	  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     
@@ -26,7 +32,81 @@
     
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style1.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+      .btn.btn-primary {
+  background: #03a696 !important;
+  border: 1px solid #03a696 !important;
+  color: #fff;
+}
+.btn.btn-primary:hover {
+  border: 1px solid #03a696 !important;
+  background: white !important;
+  color: #03a696;
+}
+    </style>
+	<script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript">
+
+$(document).ready(function(){
+
+$.ajax({
+  type:'post',
+  url:'php/store_items.php',
+  dataType:'json',
+  data:{
+    total_cart_items:"totalitems"
+  },
+  success:function(data) {
+    document.getElementById("total_items").value=data.a;
+  }
+});
+
+});
+
+    function cart(id)
+    {
+	  var ele=document.getElementById(id);
+	  var img_src=ele.getElementsByTagName("img")[0].src;
+	  var name=document.getElementById("title"+id).textContent;
+	  var price=document.getElementById("price"+id).textContent;
+	  $.ajax({
+        type:'post',
+        url:'php/store_items.php',
+        data:{
+          item_id:id,
+          item_src:img_src,
+          item_name:name,
+          item_price:price
+        },
+        success:function(response) {
+          document.getElementById("total_items").value=response;
+        }
+      });
+	
+    }
+
+    
+
+    function show_cart()
+    {
+      $.ajax({
+      type:'post',
+      url:'php/store_items.php',
+      data:{
+        showcart:"cart"
+      },
+      success:function(response) {
+        document.getElementById("mycart").innerHTML=response;
+        $("#mycart").slideToggle();
+      }
+     });
+
+    }
+	
+</script>
+
   </head>
   <body class="goto-here">
 	
@@ -42,57 +122,102 @@
       </div>
     </div>
 
-    <section class="ftco-section contact-section bg-light">
-      <div class="container">
-      	<div class="row d-flex mb-5 contact-info">
-          <div class="w-100"></div>
-          <div class="col-md-3 d-flex">
-          	<div class="info bg-white p-4">
-	            <p><span>Address:</span>Our Adress</p>
-	          </div>
-          </div>
-          <div class="col-md-3 d-flex">
-          	<div class="info bg-white p-4">
-	            <p><span>Phone:</span> <a href="tel://1234567920">+ 1235 2355 98</a></p>
-	          </div>
-          </div>
-          <div class="col-md-4 d-flex">
-          	<div class="info bg-white p-4">
-	            <p><span>Email:</span> AynouShop@gmail.com</p>
-	          </div>
-          </div>
-          
-        </div>
-        <div class="row block-9">
-          <div class="col-md-6 order-md-last d-flex">
-            <form action="#" class="bg-white p-5 contact-form">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Votre Nom">
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Votre Email">
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Sujet">
-              </div>
-              <div class="form-group">
-                <textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Message"></textarea>
-              </div>
-              <div class="form-group">
-                <input type="submit" value="Envoyer Message" class="btn btn-primary py-3 px-5">
-              </div>
-            </form>
-          
-          </div>
 
-          <div class="col-md-6 d-flex">
-          	<div id="map" class="bg-white">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d55062.84781273335!2d-9.5551488!3d30.395596799999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sma!4v1588492990879!5m2!1sfr!2sma" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+
+    <section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Formulaire de contact</h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-lg-10 col-md-12">
+					<div class="wrapper">
+						<div class="row no-gutters">
+							<div class="col-md-7 d-flex align-items-stretch">
+								<div class="contact-wrap w-100 p-md-5 p-4">
+									<h3 class="mb-4">Entrer en contact</h3>
+									<div id="form-message-warning" class="mb-4"></div> 
+				      		<div id="form-message-success" class="mb-4">
+                  Votre message a été envoyé, merci !
+				      		</div>
+									<form method="POST" id="contactForm" name="contactForm">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<input type="text" class="form-control" name="name" id="name" placeholder="Name">
+												</div>
+											</div>
+											<div class="col-md-6"> 
+												<div class="form-group">
+													<input type="email" class="form-control" name="email" id="email" placeholder="Email">
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<input type="text" class="form-control" name="subject" id="subject" placeholder="Subject">
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<textarea name="message" class="form-control" id="message" cols="30" rows="7" placeholder="Message"></textarea>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<input type="submit" value="Envoyer le message" class="btn btn-primary">
+													<div class="submitting"></div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div class="col-md-5 d-flex align-items-stretch">
+								<div class="info-wrap bg-primary w-100 p-lg-5 p-4">
+									<h3 class="mb-4 mt-md-4">Contactez-nous</h3>
+				        	
+				        	<div class="dbox w-100 d-flex align-items-center">
+				        		<div class="icon d-flex align-items-center justify-content-center">
+				        			<span class="fa fa-phone"></span>
+				        		</div>
+				        		<div class="text pl-3">
+					            <p><span>Phone:</span> <a href="tel://+212 634767129">+212 634767129</a></p>
+					          </div>
+				          </div>
+				        	<div class="dbox w-100 d-flex align-items-center">
+				        		<div class="icon d-flex align-items-center justify-content-center">
+				        			<span class="fa fa-paper-plane"></span>
+				        		</div>
+				        		<div class="text pl-3">
+					            <p><span>Email:</span> <a href="mailto:BIOTIFULLAYD@gmail.com">BIOTIFULLAYD@gmail.com</a></p>
+					          </div>
+				          </div>
+                  <div class="dbox w-100 d-flex align-items-center">
+				        		<div class="icon d-flex align-items-center justify-content-center">
+				        			<span class="fa fa-facebook"></span>
+				        		</div>
+				        		<div class="text pl-3">
+					            <p><span>facebook:</span> <a href="mailto:info@yoursite.com">Beautiful Lady</a></p>
+					          </div>
+				          </div>
+				        	<div class="dbox w-100 d-flex align-items-center">
+				        		<div class="icon d-flex align-items-center justify-content-center">
+				        			<span class="fa fa-instagram"></span>
+				        		</div>
+				        		<div class="text pl-3">
+					            <p><span>Instagram</span> <a href="#">biotiful_lady</a></p>
+					          </div>
+				          </div>
+			          </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
   <footer>
     <?php include 'includes/footer.php'  ?>
@@ -120,6 +245,12 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
+  <script src="js2/jquery.min.js"></script>
+  <script src="js2/popper.js"></script>
+  <script src="js2/bootstrap.min.js"></script>
+  <script src="js2/jquery.validate.min.js"></script>
+  <script src="js2/main.js"></script>
+
     
   </body>
 </html>

@@ -1,5 +1,12 @@
 <?php
  include_once 'includes/function.php';
+ session_start();
+
+ if (!isset($_SESSION['user_email']) || $_SESSION['user_email']!='admin@gmail.com'){
+
+  header("Location: authentification.php");
+  
+}
  ?>
 <!DOCTYPE html>
 <head>
@@ -26,18 +33,44 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript">
+      function change(id){
+      var v=document.getElementById(id).value;
+      $.ajax({
+        type:'post',
+        url:'php/store_items.php',
+        data:{
+          change:id,
+          val:v
+        },
+        success:function(data) {
+          
+        }
+      });
+}
+
+
+
+
+    </script>
+
+    <style>
+      .button-group {
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+    </style>
 </head>
 <body>
 
 <?php
   include 'includes/header.php';
-  if (!isset($_SESSION['user_email'])){
-
-    echo "<script>window.open('authentification.php','_self')</script>";
-    
-  }else if(isset($_SESSION['user_email'])=='admin@gmail.com'){
+  include 'includes/admin_header.php';
     echo"
-   <div class='hero-wrap hero-bread' style='background-image: url(images/Admin.jpg);'>
+   <div class='hero-wrap hero-bread' style='background-image: url(images/commandesd.jpeg);'>
       <div class='container'>
         <div class='row no-gutters slider-text align-items-center justify-content-center'>
           <div class='col-md-9 ftco-animate text-center'>
@@ -47,7 +80,7 @@
         </div>
       </div>
     </div>
-  <div class='container' style='margin-top:70px;margin-bottom:120px'>
+
   <center>
     
     <h1> Les commandes </h1>
@@ -56,35 +89,41 @@
 </center>
 
 
-<hr>
 
 
-    <div class='cart-list'>
-    <table class='table table-bordered table-hover'>
-        
-        <thead class='thead-primary'><!--  thead Begin  -->
+
+    <section class=\"content\">
+	<div class=\"row\">
+		<div class=\"col-md-12\">
+			<div class=\"box box-info\">
+				<div class=\"box-body table-responsive\">
+					<table id=\"example1\" class=\"table table-bordered table-striped\">
+						<thead><!--  thead Begin  -->
             
             <tr><!--  tr Begin  -->
-                <th> Identifiant : </th>
-                <th> Nom du client : </th>
-                <th> Produit : </th>
-                <th> Qte: </th>
-                <th> Totale(DHS): </th>
-                <th> Methode de paiement: </th>
-                <th> Date de Commande:</th>
+                <th> Identifiant  </th>
+                <th> Nom du client  </th>
+                <th> Les produits </th>
+                <th> Totale(DHS) </th>
+                <th> Date de Commande</th>
+                <th> Telephone</th>
+                <th> Info de lieu</th>
+                <th> Status</th>
                
             </tr>
         </thead>
         <tbody>
              ";
-             commandes();
+             admin_commandes();
              echo" 
         </tbody>
-    </table>
-    </div>
-    
-</div>";
-}
+        </table>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>";
+
 ?>
 <?php
   include 'includes/footer.php';

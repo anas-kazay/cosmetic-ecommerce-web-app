@@ -1,17 +1,20 @@
 <?php 
+session_start();
 include_once 'includes/db.php';
 
 error_reporting(E_ALL ^ E_NOTICE);
 session_start();
 $user_email= $_SESSION['user_email'];
  
-$getInfo="SELECT * FROM users WHERE user_email= '$user_email'";
+$getInfo="SELECT * FROM users WHERE userEmail= '$user_email'";
 $run_info=mysqli_query($db,$getInfo);
 while($row_info= mysqli_fetch_array($run_info)){
-    $user_name= $row_info['user_name'];
-    $user_add= $row_info['user_add'];
-    $user_city= $row_info['user_city'];
-	$user_country= $row_info['user_country'];
+    $user_name= $row_info['userName'];
+    $user_add= $row_info['adresse'];
+    $user_city= $row_info['city'];
+	  $user_country= $row_info['zipCode'];
+    $telephone= $row_info['telephone'];
+    $_SESSION['userId']=$row_info['id'];
 	
     
     
@@ -21,7 +24,7 @@ while($row_info= mysqli_fetch_array($run_info)){
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>AYNOU-SHOP - Checkout</title>
+    <title>BIOTIFUL LADY - confirmation</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -47,6 +50,64 @@ while($row_info= mysqli_fetch_array($run_info)){
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+	<script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript">
+
+$(document).ready(function(){
+
+$.ajax({
+  type:'post',
+  url:'php/store_items.php',
+  dataType:'json',
+  data:{
+    total_cart_items:"totalitems"
+  },
+  success:function(data) {
+    document.getElementById("total_items").value=data.a;
+  }
+});
+
+});
+
+    function cart(id)
+    {
+	  var ele=document.getElementById(id);
+	  var img_src=ele.getElementsByTagName("img")[0].src;
+	  var name=document.getElementById("title"+id).textContent;
+	  var price=document.getElementById("price"+id).textContent;
+	  $.ajax({
+        type:'post',
+        url:'php/store_items.php',
+        data:{
+          item_src:img_src,
+          item_name:name,
+          item_price:price
+        },
+        success:function(response) {
+          document.getElementById("total_items").value=response;
+        }
+      });
+	
+    }
+
+    function show_cart()
+    {
+      $.ajax({
+      type:'post',
+      url:'php/store_items.php',
+      data:{
+        showcart:"cart"
+      },
+      success:function(response) {
+        document.getElementById("mycart").innerHTML=response;
+        $("#mycart").slideToggle();
+      }
+     });
+
+    }
+	
+</script>
+
   </head>
   <body class="goto-here">
 
@@ -56,22 +117,23 @@ while($row_info= mysqli_fetch_array($run_info)){
     <!-- END nav -->
 	
 
-    <div class="hero-wrap hero-bread" style="background-image: url('http://blog.alloconv.fr/wp-content/uploads/2016/11/cbpay.jpg'); background-size:cover; image-width:80%;">
+    <div class="hero-wrap hero-bread " style="background-image: url('https://images.pexels.com/photos/8293649/pexels-photo-8293649.jpeg?auto=compress&cs=tinysrgb&w=1600'); background-size:cover; image-width:80%;">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
-          	<p class="breadcrumbs"><span class="mr-2"><a href="index.php" style="color:black;">Accueil</a></span><span style="color:black;">Carte</span></p>
-            <h1 class="mb-0 bread" style="color:black;">Paiement</h1>
+            <h1 class="mb-0 bread" style="color:black;">confirmation</h1>
           </div>
         </div>
       </div>
     </div>
 
-    <section class="ftco-section">
-      <div class="container">
-        <div class="row justify-content-center">
+    <section class="ftco-section " >
+      <div class="container  d-felx">
+        <div class="row ">
+          
           <div class="col-xl-7 ftco-animate">
-						<form action="add-commande.php" method="POST" class="billing-form">
+            
+						<form action="add-commande.php" method="POST" class="billing-form" style='display:flex;justify-content: center;'>
 	          	<div class="row align-items-end">
 	          		
 	              <div class="col-md-12">
@@ -81,12 +143,15 @@ while($row_info= mysqli_fetch_array($run_info)){
 	                </div>
                 </div>
                 <div class="w-100"></div>
+
+                
 				<div class="col-md-12">
 	                <div class="form-group">
-	                	<label for="pays">Pays</label>
-	                  <input name="country" type="text" class="form-control" value="<?php echo $user_country  ?>">
+	                	<label for="pays">Telephone</label>
+	                  <input name="telephone" type="text" class="form-control" value="<?php echo $telephone  ?>">
 	                </div>
                 </div>
+<div class="w-100"></div>
 		            <div class="w-100"></div>
 		            <div class="col-md-12">
 		            	<div class="form-group">
@@ -108,7 +173,7 @@ while($row_info= mysqli_fetch_array($run_info)){
 		            <div class="col-md-6">
 		            	<div class="form-group">
 		            		<label for="postcodezip">Postcode / ZIP *</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input name='zipCode' type="text" class="form-control" value="<?php echo $user_country  ?>">
 	                </div>
 		            </div>
 		           
@@ -121,22 +186,8 @@ while($row_info= mysqli_fetch_array($run_info)){
 	          	</div
 	          	<div class="col-xl-5">
 	          		<div class="cart-detail p-3 p-md-3">
-	          			<h3 class="billing-heading mb-4"> Methode de paiement</h3>
 									
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio" class="mr-2" value="cashDilevery"> Cash on Dilevery</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio" class="mr-2" value="paypal"> Paypal</label>
-											</div>
-										</div> 
-									</div>
+									
 								
 								<button  name="valider" class="btn btn-primary col-lg-6">Valider</button>
 								</div>

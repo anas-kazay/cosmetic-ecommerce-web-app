@@ -1,19 +1,23 @@
 <?php 
+session_start();
 include_once 'includes/db.php';
-
+if (!isset( $_SESSION['user_email'])){
+    header('Location: authentification.php');
+    exit();
+}
 error_reporting(E_ALL ^ E_NOTICE);
 session_start();
 $user_email= $_SESSION['user_email'];
  
-$getInfo="SELECT * FROM users WHERE user_email= '$user_email'";
+$getInfo="SELECT * FROM users WHERE userEmail= '$user_email'";
 $run_info=mysqli_query($db,$getInfo);
 while($row_info= mysqli_fetch_array($run_info)){
-    $user_name= $row_info['user_name'];
-    $password= $row_info['password'];
-    $user_contact= $row_info['user_contact'];
-    $user_add= $row_info['user_add'];
-    $user_city= $row_info['user_city'];
-    $user_country= $row_info['user_country'];
+    $user_name= $row_info['userName'];
+    $password= $row_info['userPwd'];
+    $user_contact= $row_info['telephone'];
+    $user_add= $row_info['adresse'];
+    $user_city= $row_info['city'];
+    $user_zipCode= $row_info['zipCode'];
     
     
 } 
@@ -103,7 +107,7 @@ while($row_info= mysqli_fetch_array($run_info)){
                                
                                <label>Email</label>
                                
-                               <input type="text" value="<?php echo $user_email; ?>" class="form-control" name="c_email" required>
+                               <input type="text" value="<?php echo $user_email; ?>" class="form-control" name="c_email" required readonly="readonly">
                                
                            </div><!-- form-group Finish -->
                            
@@ -112,22 +116,6 @@ while($row_info= mysqli_fetch_array($run_info)){
                                <label>Mot de pass</label>
                                
                                <input type="text" value="<?php echo $password; ?>" class="form-control" name="c_password" required>
-                               
-                           </div><!-- form-group Finish -->
-                           
-                           <div class="form-group"><!-- form-group Begin -->
-                               
-                               <label>Pays</label>
-                               
-                               <input type="text" value="<?php echo $user_country; ?>" class="form-control" name="c_country" required>
-                               
-                           </div><!-- form-group Finish -->
-                           
-                           <div class="form-group"><!-- form-group Begin -->
-                               
-                               <label>Ville</label>
-                               
-                               <input type="text" value="<?php echo $user_city; ?>" class="form-control" name="c_city" required>
                                
                            </div><!-- form-group Finish -->
                            
@@ -146,14 +134,28 @@ while($row_info= mysqli_fetch_array($run_info)){
                                <input type="text" value="<?php echo $user_add; ?>" class="form-control" name="c_address" required>
                                
                            </div><!-- form-group Finish -->
-                           
+
                            <div class="form-group"><!-- form-group Begin -->
                                
-                               <label>Your Profile Picture</label>
+                               <label>Ville</label>
                                
-                               <input type="file" class="form-control form-height-custom" name="c_image" required>
+                               <input type="text" value="<?php echo $user_city; ?>" class="form-control" name="c_city" required>
                                
                            </div><!-- form-group Finish -->
+                           
+                           
+                           
+                           
+
+                           <div class="form-group"><!-- form-group Begin -->
+                               
+                               <label>Zip Code</label>
+                               
+                               <input type="text" value="<?php echo $user_zipCode; ?>" class="form-control" name="c_country" required>
+                               
+                           </div><!-- form-group Finish -->
+
+
                            
                            <div class="text-center"><!-- text-center Begin -->
                                
@@ -187,15 +189,14 @@ while($row_info= mysqli_fetch_array($run_info)){
  if(isset($_POST['valider'])){
     $name=$_POST['c_name'];
     $password=$_POST['c_password'];
-    $country=$_POST['c_country'];
+    $zipCode=$_POST['c_country'];
     $city=$_POST['c_city'];
     $contact=$_POST['c_contact'];
     $add=$_POST['c_address'];
-    $image = $_FILES['c_image']['name'];
     $temp_name = $_FILES['c_image']['tmp_name'];
     move_uploaded_file($temp_name,'images/$product_image');
-
-      $update_user="UPDATE users SET user_name='$name' , user_country='$country', user_city='$city', user_contact='$contact', user_image='$image' ,password='$password' WHERE user_email='$user_email'";
+      
+      $update_user="UPDATE users SET userName='$name' , zipCode='$zipCode', city='$city', telephone='$contact',userPwd='$password',adresse='$add' WHERE userEmail='$user_email'";
       $run=mysqli_query($db,$update_user);
       echo "<script>alert('vos informations ont été mises à jour avec succès')</script>";
       echo "<script>window.open('user-account.php','_self')</script>";

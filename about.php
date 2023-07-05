@@ -1,7 +1,8 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>AYNOU-SHOP/À propos</title>
+    <title>Beautiful Lady/À propos</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -27,6 +28,67 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript">
+
+$(document).ready(function(){
+
+$.ajax({
+  type:'post',
+  url:'php/store_items.php',
+  dataType:'json',
+  data:{
+    total_cart_items:"totalitems"
+  },
+  success:function(data) {
+    document.getElementById("total_items").value=data.a;
+  }
+});
+
+});
+
+    function cart(id)
+    {
+	  var ele=document.getElementById(id);
+	  var img_src=ele.getElementsByTagName("img")[0].src;
+	  var name=document.getElementById("title"+id).textContent;
+	  var price=document.getElementById("price"+id).textContent;
+	  $.ajax({
+        type:'post',
+        url:'php/store_items.php',
+        data:{
+          item_id:id,
+          item_src:img_src,
+          item_name:name,
+          item_price:price
+        },
+        success:function(response) {
+          document.getElementById("total_items").value=response;
+        }
+      });
+	
+    }
+
+    
+
+    function show_cart()
+    {
+      $.ajax({
+      type:'post',
+      url:'php/store_items.php',
+      data:{
+        showcart:"cart"
+      },
+      success:function(response) {
+        document.getElementById("mycart").innerHTML=response;
+        $("#mycart").slideToggle();
+      }
+     });
+
+    }
+	
+</script>
+
   </head>
   <body class="goto-here">
   <?php
@@ -34,7 +96,7 @@
   ?>
     <!-- END nav -->
 
-    <div class="hero-wrap hero-bread" style="background-image: url('images/about-us.jpg');">
+    <div class="hero-wrap hero-bread" style="background-image: url('images/about.jpeg');">
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
@@ -56,16 +118,16 @@
 					<div class="col-md-7 py-5 wrap-about pb-md-5 ftco-animate">
 	          <div class="heading-section-bold mb-4 mt-md-5">
 	          	<div class="ml-md-0">
-		            <h2 class="mb-4">Bienvenue chez AYNOU-SHOP</h2>
+		            <h2 class="mb-4">Bienvenue chez Beautiful Lady</h2>
 	            </div>
 	          </div>
 	          <div class="pb-md-5">
-              <p> AYNOU-SHOP est un boutique en ligne qui vous offre des produits cosmetiques à 100% BIO.</p>
+              <p> Beautiful Lady est un boutique en ligne qui vous offre des produits cosmetiques à 100% BIO.</p>
               <p>Trop souvent, les produits bio et naturels disponibles sur le marché ne sont pas adaptés aux attentes du consommateur, que ce soit à cause d’un mauvais rapport qualité prix (trop chers ou de faible qualité) ou à cause d’origines douteuses.
-                Et por cela AYNOU-SHOP supprimant les intermédiaires, en mettant en place un processus de sélection adapté des fournisseurs(coopératives), et en offrant un service de livraison rapide à domicile, AYNOU-SHOP fait de la satisfaction de ses clients sa première priorité.
-                En misant majoritairement sur la production locale, AYNOU-SHOP essayé de mis en valeur les produits produisent par des femmes des coopératives locaux</p>
+                Et por cela Beautiful Lady supprimant les intermédiaires, en mettant en place un processus de sélection adapté des fournisseurs(coopératives), et en offrant un service de livraison rapide à domicile, Beautiful Lady fait de la satisfaction de ses clients sa première priorité.
+                En misant majoritairement sur la production locale, Beautiful Lady essayé de mis en valeur les produits produisent par des femmes des coopératives locaux</p>
 							<p>Paiement cash à livraion ou par internet. Paiements sécurisés. Livraison à domicile.</p>
-							<p><a href="produits-argane.php?product_categ=0" class="btn btn-primary">Achetez maintenant</a></p>
+							<p><a href="products.php" class="btn btn-primary">Achetez maintenant</a></p>
 						</div>
 					</div>
 				</div>

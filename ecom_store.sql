@@ -29,10 +29,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `categories` (
-  `cat_id` int(10) NOT NULL,
+  `cat_id` int NOT NULL PRIMARY key AUTO_INCREMENT,
   `cat_title` text NOT NULL,
   `cat_desc` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `categories`
@@ -56,9 +56,7 @@ CREATE TABLE `products` (
   `cat_id` int(10) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `product_title` text NOT NULL,
-  `product_img1` text NOT NULL,
-  `product_img2` text NOT NULL,
-  `product_img3` text NOT NULL,
+  `product_img` text NOT NULL,
   `product_price` int(10) NOT NULL,
   `product_desc` text NOT NULL,
   `product_keywords` text NOT NULL
@@ -71,7 +69,7 @@ CREATE TABLE `products` (
 --
 
 CREATE TABLE `product_categories` (
-  `p_cat_id` int(10) NOT NULL,
+  `p_cat_id` int NOT NULL AUTO_INCREMENT,
   `p_cat_title` text NOT NULL,
   `p_cat_desc` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
